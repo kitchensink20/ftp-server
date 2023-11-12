@@ -1,3 +1,11 @@
 LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan1000 at 2023-11-12T13:21.
 ERROR: At 2023-11-12T13:21 client 0:0:0:0:0:0:0:1 logged as ivan1000 faced this error: Stream closed
 LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan1000 at 2023-11-12T13:21.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan1000 at 2023-11-12T23:13.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan1000 at 2023-11-12T23:13.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as admin at 2023-11-12T23:25.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-12T23:31.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as ivan at 2023-11-12T23:32.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-12T23:32.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as ivan at 2023-11-12T23:32.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-12T23:32.

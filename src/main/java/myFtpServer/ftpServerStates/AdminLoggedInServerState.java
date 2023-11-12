@@ -1,18 +1,20 @@
 package myFtpServer.ftpServerStates;
 
+import commandHandling.*;
 import controller.FtpServerController;
 import model.User;
 import myFtpServer.protocol.FtpRequest;
 import myFtpServer.protocol.FtpResponse;
+import view.UI;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 
 public class AdminLoggedInServerState implements FtpServerState{
-    private FtpServerController controller;
+    private final UI ui;
+    BaseCommandHandler commandHandler;
 
-    public AdminLoggedInServerState(FtpServerController controller){
-        this.controller = controller;
+    public AdminLoggedInServerState(UI ui){
+        this.ui = ui;
     }
 
     @Override
@@ -22,51 +24,48 @@ public class AdminLoggedInServerState implements FtpServerState{
 
         switch (command) {
             case "RETR": // to retrieve file from the server
-                // TO DO
+                commandHandler = new RetrCommandHandler();
                 break;
             case "STOR": // to store file on server
-                // TO DO
+                commandHandler = new StorCommandHandler();
                 break;
             case "DELE": // to delete a file
-                // TO DO
+                commandHandler = new DeleCommandHandler();
                 break;
             case "TYPE": //  to set the type of file to be transferred
-                // TO DO
+                commandHandler = new TypeCommandHandler();
                 break;
             case "CDUP": // to change to the parent of the current directory
-                // TO MODIFY (not working properly for now)
-                FtpResponse cdupResponse = controller.changeToParentDirectory(user);
-                return cdupResponse;
+                commandHandler = new CdupCommandHandler();
+                break;
             case "LIST": // to list files in a directory
-                // TO MODIFY (not working properly for now)
-                FtpResponse listResponse = controller.listDirectoryContent(user);
-                return listResponse;
+                commandHandler = new ListCommandHandler();
+                break;
             case "PWD": // to print the current working directory
-                // TO MODIFY (not working properly for now)
-                return new FtpResponse(257, user.getHomeDirectory() + "\\ is the current directory");
+                commandHandler = new PwdCommandHandler();
+                break;
             case "EPSV":
-                ServerSocket passiveSocket = new ServerSocket(0);
-                int dataPort = passiveSocket.getLocalPort();
-                return new FtpResponse(229, " Entering Extended Passive Mode (|||" + dataPort + "|)");
+                commandHandler = new EpsvCommandHandler();
+                break;
             case "CREATE": // to create new user; used with arguments [[username, password, isAdmin]]
-                FtpResponse createResponse = controller.createUserByAdmin(user, arguments);
-                return createResponse;
+                commandHandler = new CreateCommandHandler();
+                break;
             case "USERS": // to list all users
-                FtpResponse usersResponse = controller.getUsersListByAdmin(user);
-                return usersResponse;
+                commandHandler = new UsersCommandHandler();
+                break;
             case "LOG": // to display log file content
-                FtpResponse logResponse = controller.viewLogFileByAdmin(user);
-                return logResponse;
+                commandHandler = new LogCommandHandler();
+                break;
             case "ACCT": // to specify the account information
                 return new FtpResponse(230, "username: " + user.getUsername() + "; has admin rights: " + user.getIsAdmin());
             case "SYST": // to display server specification
                 return new FtpResponse(215, "NAME " + System.getProperty("os.name") + " VERSION " + System.getProperty("os.version"));
             case "QUIT": // to end session
-                controller.processLogOut(user.getUsername());
-                return new FtpResponse(221, "Service closing control connection");
+                commandHandler = new QuitCommandHandler();
+                break;
             default:
                 return new FtpResponse(502, "Command not implemented");
         }
-        return new FtpResponse(200, ":(");
+        return commandHandler.handleCommand(arguments, user, ui);
     }
 }

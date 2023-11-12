@@ -32,7 +32,7 @@ public class AuthenticationService {
     public User authenticate(String username, String password, Logger logger, Socket clientSocket) throws IOException {
         User currentUser = userService.getByUsername(username);
         if(currentUser != null && currentUser.getPassword().equals(password)){
-            if (sessionService.getAllSessionsForUser(currentUser).isEmpty()){
+            if (sessionService.getActiveSessionForUser(currentUser.getUserId()) == null){
                 Session newSession = new Session(currentUser);
                 sessionService.createSession(newSession);
                 logger.writeLogInEventToFile(clientSocket.getInetAddress().getHostAddress(), currentUser.getUsername());

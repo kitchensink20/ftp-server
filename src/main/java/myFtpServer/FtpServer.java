@@ -16,9 +16,9 @@ import java.net.Socket;
 public class FtpServer {
     private static final int PORT = 21;
     private static final int MAX_CONNECTION_NUM = 10;
-    private FtpServerController controller;
+    private final FtpServerController controller = new FtpServerController();
     private UI ui;
-    private Logger logger;
+    private final Logger logger;
     private User currentUser;
     private FtpServerState serverState;
 
@@ -36,7 +36,6 @@ public class FtpServer {
                 System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
                 ui = new UI(clientSocket.getInputStream(), clientSocket.getOutputStream());
-                controller = new FtpServerController(ui);
                 serverState = new NotLoggedInServerState(this, clientSocket);
                 Thread clientThread = new Thread(() -> handleClient(clientSocket));
                 clientThread.start();
@@ -98,4 +97,6 @@ public class FtpServer {
     public FtpServerController getController() {
         return controller;
     }
+
+    public UI getUi() { return ui; }
 }

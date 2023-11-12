@@ -1,5 +1,6 @@
 package myFtpServer.ftpServerStates;
 
+import commandHandling.*;
 import controller.FtpServerController;
 import model.User;
 import myFtpServer.protocol.FtpRequest;
@@ -12,67 +13,65 @@ import java.net.ServerSocket;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserLoggedInServerState implements FtpServerState {
-    private FtpServerController controller;
+    private UI ui;
     private static ConcurrentHashMap<Integer, UserCaretaker> userCaretakers = new ConcurrentHashMap<>();
+    BaseCommandHandler commandHandler;
 
-    public UserLoggedInServerState(FtpServerController controller) {
-        this.controller = controller;
+    public UserLoggedInServerState(UI ui) {
+        this.ui = ui;
     }
 
     @Override
     public FtpResponse handleCommand(User user, FtpRequest ftpRequest) throws IOException {
         String command = ftpRequest.getCommand();
         String arguments = ftpRequest.getArguments();
-        UserCaretaker userCaretaker = getUserCaretaker(user.getUserId());
 
         while(true) {
             switch (command) {
                 case "RETR": // to retrieve file from the server
-                    // TO DO
+                    commandHandler = new RetrCommandHandler();
                     break;
                 case "STOR": // to store file on server
-                    // TO DO
+                    commandHandler = new StorCommandHandler();
                     break;
                 case "DELE": // to delete a file
-                    // TO DO
+                    commandHandler = new DeleCommandHandler();
                     break;
                 case "TYPE": //  to set the type of file to be transferred
-                    // TO DO
+                    commandHandler = new TypeCommandHandler();
                     break;
                 case "CDUP": // to change to the parent of the current directory
-                    // TO MODIFY (not working properly for now)
-                    return new FtpResponse(550, "Permission denied");
+                    commandHandler = new CdupCommandHandler();
+                    break;
                 case "LIST": // to list files in a directory
-                    // TO MODIFY (not working properly for now
-                    return controller.listDirectoryContent(user);
+                   commandHandler = new ListCommandHandler();
+                   break;
                 case "PWD":  // to print the current working directory
-                    // TO MODIFY (not working properly for now)
-                    return new FtpResponse(257, user.getHomeDirectory() + "\\ is the current directory");
+                    commandHandler = new PwdCommandHandler();
+                    break;
                 case "EPSV":
-                    ServerSocket passiveSocket = new ServerSocket(0);
-                    int dataPort = passiveSocket.getLocalPort();
-                    return new FtpResponse(229, " Entering Extended Passive Mode (|||" + dataPort + "|)");
+                    commandHandler = new EpsvCommandHandler();
+                    break;
                 case "ALTER": // to change user data such as username or password; used as ALTER -username [[new username]] or ALTER -password [[new password]]
-                    FtpResponse alterResponse = controller.changeUser(user, userCaretaker, arguments);
-                    return alterResponse;
+                    commandHandler = new AlterCommandHandler();
+                    break;
                 case "RESTORE": // to restore user state
-                    FtpResponse restoreResponse = controller.restoreUserState(user, userCaretaker);
-                    return restoreResponse;
+                    commandHandler = new RestoreCommandHandler();
+                    break;
                 case "ACCT": // to specify the account information
                     return new FtpResponse(230, "username: " + user.getUsername() + "; has admin rights: " + user.getIsAdmin());
                 case "SYST": // to display server specification
                     return new FtpResponse(215, "NAME " + System.getProperty("os.name") + " VERSION " + System.getProperty("os.version"));
                 case "QUIT": // to end session
-                    controller.processLogOut(user.getUsername());
-                    return new FtpResponse(221, "Service closing control connection");
+                    commandHandler = new QuitCommandHandler();
                 default:
                     return new FtpResponse(502, "Command not implemented");
             }
-            return new FtpResponse(200, ":(");
+            return commandHandler.handleCommand(arguments, user, ui);
         }
     }
 
-    private UserCaretaker getUserCaretaker(int id) {
+    public static UserCaretaker getUserCaretaker(int id) {
         return userCaretakers.computeIfAbsent(id, k -> new UserCaretaker());
     }
 }

@@ -16,11 +16,13 @@ public class NotLoggedInServerState implements FtpServerState{
     private final Logger logger;
     private final Socket clientSocket;
     private final FtpServer ftpServer;
+    private final UI ui;
 
     public NotLoggedInServerState(FtpServer ftpServer, Socket clientSocket){
         this.ftpServer = ftpServer;
         this.logger = ftpServer.getLogger();
         this.controller = ftpServer.getController();
+        this.ui = ftpServer.getUi();
         this.clientSocket = clientSocket;
     }
 
@@ -47,9 +49,9 @@ public class NotLoggedInServerState implements FtpServerState{
                 else {
                     setUserData(user, loggedInUser);
                     if (user.getIsAdmin())
-                        ftpServer.setState(new AdminLoggedInServerState(controller));
+                        ftpServer.setState(new AdminLoggedInServerState(ui));
                     else
-                        ftpServer.setState(new UserLoggedInServerState(controller));
+                        ftpServer.setState(new UserLoggedInServerState(ui));
 
                     return new FtpResponse(230, "User successfully logged in");
                 }
