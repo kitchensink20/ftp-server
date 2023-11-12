@@ -98,8 +98,4 @@ public class FtpServer {
     public FtpServerController getController() {
         return controller;
     }
-
-    public UI getUi() {
-        return ui;
-    }
 }

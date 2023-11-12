@@ -13,7 +13,6 @@ import java.net.Socket;
 
 public class NotLoggedInServerState implements FtpServerState{
     private final FtpServerController controller;
-    private final UI ui;
     private final Logger logger;
     private final Socket clientSocket;
     private final FtpServer ftpServer;
@@ -22,7 +21,6 @@ public class NotLoggedInServerState implements FtpServerState{
         this.ftpServer = ftpServer;
         this.logger = ftpServer.getLogger();
         this.controller = ftpServer.getController();
-        this.ui = ftpServer.getUi();
         this.clientSocket = clientSocket;
     }
 
@@ -49,12 +47,14 @@ public class NotLoggedInServerState implements FtpServerState{
                 else {
                     setUserData(user, loggedInUser);
                     if (user.getIsAdmin())
-                        ftpServer.setState(new AdminLoggedInServerState(controller, ui));
+                        ftpServer.setState(new AdminLoggedInServerState(controller));
                     else
-                        ftpServer.setState(new UserLoggedInServerState(controller, ui));
+                        ftpServer.setState(new UserLoggedInServerState(controller));
 
                     return new FtpResponse(230, "User successfully logged in");
                 }
+            case "SYST":
+                return new FtpResponse(215, "NAME " + System.getProperty("os.name") + " VERSION " + System.getProperty("os.version"));
             case "QUIT":
                 if(user != null)
                     controller.processLogOut(user.getUsername());

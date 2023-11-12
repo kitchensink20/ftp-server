@@ -66,7 +66,6 @@ public class FtpServerController {
     }
 
     public FtpResponse listDirectoryContent(User user) {
-        System.out.println("from list" + user.getUsername());
         if(user == null) return null;
 
         Path currentDirectory = Paths.get(user.getHomeDirectory()).toAbsolutePath();
