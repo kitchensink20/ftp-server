@@ -5,7 +5,6 @@ import myFtpServer.ftpServerStates.UserLoggedInServerState;
 import myFtpServer.protocol.FtpResponse;
 import service.UserService;
 import userMemento.UserMemento;
-import view.UI;
 
 import java.io.IOException;
 
@@ -18,7 +17,7 @@ public class RestoreCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         UserMemento restoredUserMemento = UserLoggedInServerState.getUserCaretaker(user.getUserId()).getLastSavedMemento();
         if(restoredUserMemento == null)
             return new FtpResponse(202, "No action taken, user state is current");

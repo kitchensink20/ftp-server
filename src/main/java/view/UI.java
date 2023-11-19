@@ -7,12 +7,23 @@ import java.io.*;
 import java.util.List;
 
 public class UI {
+    private static UI ui;
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    public UI(InputStream inputStream, OutputStream outputStream) {
+    private UI(InputStream inputStream, OutputStream outputStream) {
         this.writer = new BufferedWriter(new OutputStreamWriter(outputStream));
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
+    }
+
+    public static UI getUI(InputStream inputStream, OutputStream outputStream){
+        if(ui == null)
+            ui = new UI(inputStream, outputStream);
+        return ui;
+    }
+
+    public static UI getUI() {
+        return ui;
     }
 
     public String acceptUserInput() throws IOException {

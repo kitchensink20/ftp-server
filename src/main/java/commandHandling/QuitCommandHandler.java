@@ -5,8 +5,6 @@ import myFtpServer.protocol.FtpResponse;
 import service.AuthenticationService;
 import service.SessionService;
 import service.UserService;
-import view.UI;
-
 import java.io.IOException;
 
 public class QuitCommandHandler extends BaseCommandHandler{
@@ -18,7 +16,7 @@ public class QuitCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         authenticationService.signOut(user.getUsername());
         return new FtpResponse(221, "Service closing control connection");
     }

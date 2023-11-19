@@ -16,7 +16,7 @@ public class CdupCommandHandler extends BaseCommandHandler{
 
     // TO MODIFY (not working properly for now)
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         Path currentDirectory = Paths.get(user.getHomeDirectory()).toAbsolutePath();
         Path parentDirectory = currentDirectory.getParent();
         if(parentDirectory != null) {

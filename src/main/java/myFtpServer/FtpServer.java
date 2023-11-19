@@ -23,7 +23,7 @@ public class FtpServer {
     private FtpServerState serverState;
 
     public FtpServer() throws IOException {
-        logger = new Logger();
+        logger = Logger.getLogger();
     }
 
     public void start() {
@@ -35,7 +35,7 @@ public class FtpServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
-                ui = new UI(clientSocket.getInputStream(), clientSocket.getOutputStream());
+                ui = UI.getUI(clientSocket.getInputStream(), clientSocket.getOutputStream());
                 serverState = new NotLoggedInServerState(this, clientSocket);
                 Thread clientThread = new Thread(() -> handleClient(clientSocket));
                 clientThread.start();
@@ -63,14 +63,12 @@ public class FtpServer {
                 if(ftpResponse.getStatusCode() == 221)
                     break;
             }
-            System.out.println(currentUser.getUsername());
         } catch (IOException e) {
             logger.writeErrorEventToFile(clientSocket.getInetAddress().getHostAddress(), currentUser.getUsername(), e.getMessage());
             e.printStackTrace();
         } finally {
             try {
                 if(currentUser != null) {
-                    System.out.println(currentUser.getUsername());
                     controller.deactivateSessionIfActive(currentUser.getUserId());
                     logger.writeLogOutEventToFile(clientSocket.getInetAddress().getHostAddress(), currentUser.getUsername());
                 }
@@ -90,13 +88,7 @@ public class FtpServer {
         this.serverState = ftpServerState;
     }
 
-    public Logger getLogger() {
-        return logger;
-    }
-
     public FtpServerController getController() {
         return controller;
     }
-
-    public UI getUi() { return ui; }
 }

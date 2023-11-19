@@ -13,7 +13,7 @@ public class DeleCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         // TO DO
         return null;
     }

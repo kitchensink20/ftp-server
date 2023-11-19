@@ -13,7 +13,7 @@ public class PwdCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         // TO MODIFY (not working properly for now)
         return new FtpResponse(257, user.getHomeDirectory() + "\\ is the current directory");
     }

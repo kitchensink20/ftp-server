@@ -13,13 +13,9 @@ import java.net.ServerSocket;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserLoggedInServerState implements FtpServerState {
-    private UI ui;
     private static ConcurrentHashMap<Integer, UserCaretaker> userCaretakers = new ConcurrentHashMap<>();
     BaseCommandHandler commandHandler;
 
-    public UserLoggedInServerState(UI ui) {
-        this.ui = ui;
-    }
 
     @Override
     public FtpResponse handleCommand(User user, FtpRequest ftpRequest) throws IOException {
@@ -67,7 +63,7 @@ public class UserLoggedInServerState implements FtpServerState {
                 default:
                     return new FtpResponse(502, "Command not implemented");
             }
-            return commandHandler.handleCommand(arguments, user, ui);
+            return commandHandler.handleCommand(arguments, user);
         }
     }
 

@@ -17,7 +17,7 @@ public class UsersCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         List<User> users = userService.getAllUsers();
         ui.displayUsersList(users);
         return new FtpResponse(212, "List of users successfully retrieved");

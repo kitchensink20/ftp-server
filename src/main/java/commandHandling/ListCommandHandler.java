@@ -2,7 +2,6 @@ package commandHandling;
 
 import model.User;
 import myFtpServer.protocol.FtpResponse;
-import view.UI;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -17,7 +16,7 @@ public class ListCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         // TO MODIFY (not working properly for now)
         Path currentDirectory = Paths.get(user.getHomeDirectory()).toAbsolutePath();
         try(DirectoryStream<Path> stream = Files.newDirectoryStream(currentDirectory)) {

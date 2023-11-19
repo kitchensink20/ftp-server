@@ -15,7 +15,7 @@ public class LogCommandHandler extends BaseCommandHandler {
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         List<String> fileContent = FileHandler.getLogFileContent();
         ui.displayLogFileContent(fileContent);
         return new FtpResponse(212, "Transfer complete. Log file content successfully displayed");

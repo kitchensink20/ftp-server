@@ -1,21 +1,14 @@
 package myFtpServer.ftpServerStates;
 
 import commandHandling.*;
-import controller.FtpServerController;
 import model.User;
 import myFtpServer.protocol.FtpRequest;
 import myFtpServer.protocol.FtpResponse;
-import view.UI;
 
 import java.io.IOException;
 
 public class AdminLoggedInServerState implements FtpServerState{
-    private final UI ui;
     BaseCommandHandler commandHandler;
-
-    public AdminLoggedInServerState(UI ui){
-        this.ui = ui;
-    }
 
     @Override
     public FtpResponse handleCommand(User user, FtpRequest ftpRequest) throws IOException {
@@ -66,6 +59,6 @@ public class AdminLoggedInServerState implements FtpServerState{
             default:
                 return new FtpResponse(502, "Command not implemented");
         }
-        return commandHandler.handleCommand(arguments, user, ui);
+        return commandHandler.handleCommand(arguments, user);
     }
 }

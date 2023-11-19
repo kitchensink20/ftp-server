@@ -17,7 +17,7 @@ public class AlterCommandHandler extends BaseCommandHandler {
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         if(arguments.isEmpty() || arguments.isBlank())
             return new FtpResponse(501, "Syntax error in parameters or arguments. Try like this: ALTER -username [[new username]] / ALTER -password [[new password]]");
 

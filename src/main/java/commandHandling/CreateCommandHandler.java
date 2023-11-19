@@ -16,7 +16,7 @@ public class CreateCommandHandler extends BaseCommandHandler{
     }
 
     @Override
-    protected FtpResponse executeCommand(String arguments, User user, UI ui) throws IOException {
+    protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         String[] argumentsSplit = arguments.split(" ");
         if(argumentsSplit.length != 3)
             return new FtpResponse(501, "Syntax error in parameters or arguments. Try like this: CREATE [[username, password, isAdmin]]");
