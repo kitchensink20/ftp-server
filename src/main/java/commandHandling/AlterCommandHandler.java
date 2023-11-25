@@ -4,12 +4,10 @@ import model.User;
 import myFtpServer.ftpServerStates.UserLoggedInServerState;
 import myFtpServer.protocol.FtpResponse;
 import service.UserService;
-import view.UI;
-
 import java.io.IOException;
 
 public class AlterCommandHandler extends BaseCommandHandler {
-    private final UserService userService = new UserService();
+    private final UserService userService = UserService.getUserService();
 
     @Override
     protected boolean authorize(User user) {
@@ -20,9 +18,6 @@ public class AlterCommandHandler extends BaseCommandHandler {
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         if(arguments.isEmpty() || arguments.isBlank())
             return new FtpResponse(501, "Syntax error in parameters or arguments. Try like this: ALTER -username [[new username]] / ALTER -password [[new password]]");
-
-        if (user == null)
-            return new FtpResponse(550, "Permission denied");
 
         String[] argumentsSplit = arguments.split(" ");
         if(argumentsSplit.length != 2)

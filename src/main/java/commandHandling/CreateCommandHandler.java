@@ -3,12 +3,11 @@ package commandHandling;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.UserService;
-import view.UI;
 
 import java.io.IOException;
 
 public class CreateCommandHandler extends BaseCommandHandler{
-    private final UserService userService = new UserService();
+    private final UserService userService = UserService.getUserService();
 
     @Override
     protected boolean authorize(User user) {

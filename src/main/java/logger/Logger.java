@@ -1,6 +1,5 @@
 package logger;
 
-import com.mysql.cj.log.Log;
 import enums.LogType;
 
 import java.io.BufferedWriter;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 public class Logger {
     private static Logger logger;
     private final String LOG_FILE_PATH = "ServerFiles\\LogFile.txt";
-    private BufferedWriter fileWriter;
+    private final BufferedWriter fileWriter;
 
     private Logger() throws IOException {
         fileWriter = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true));

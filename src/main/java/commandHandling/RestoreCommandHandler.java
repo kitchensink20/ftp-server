@@ -9,7 +9,7 @@ import userMemento.UserMemento;
 import java.io.IOException;
 
 public class RestoreCommandHandler extends BaseCommandHandler{
-    private final UserService userService = new UserService();
+    private final UserService userService = UserService.getUserService();
 
     @Override
     protected boolean authorize(User user) {

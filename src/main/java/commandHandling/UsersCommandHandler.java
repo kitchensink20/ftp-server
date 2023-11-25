@@ -9,7 +9,13 @@ import java.io.IOException;
 import java.util.List;
 
 public class UsersCommandHandler extends BaseCommandHandler{
-    private final UserService userService = new UserService();
+    private final UI ui;
+
+    public UsersCommandHandler(UI ui) {
+        this.ui = ui;
+    }
+
+    private final UserService userService = UserService.getUserService();
 
     @Override
     protected boolean authorize(User user) {

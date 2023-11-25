@@ -5,7 +5,7 @@ import myFtpServer.protocol.FtpResponse;
 
 import java.io.IOException;
 
-public class StorCommandHandler extends BaseCommandHandler{
+public class ErptCommandHandler extends BaseCommandHandler{
     @Override
     protected boolean authorize(User user) {
         return user != null;
@@ -13,7 +13,6 @@ public class StorCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        // TO DO
         return null;
     }
 }

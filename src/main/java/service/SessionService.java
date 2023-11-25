@@ -9,17 +9,25 @@ import java.util.Collections;
 import java.util.List;
 
 public class SessionService {
-    private SessionRepository sessionRepository;
-    public SessionService() {
+    private final SessionRepository sessionRepository;
+    private static SessionService sessionService;
+
+    private SessionService() {
         this.sessionRepository = new SessionRepositoryImpl();
+    }
+
+    public static SessionService getSessionService() {
+        if(sessionService == null)
+            sessionService = new SessionService();
+        return sessionService;
     }
 
     public List<Session> getByUserId(int userId) {
         return sessionRepository.getByUserId(userId);
     }
 
-    public Session createSession(Session session) {
-        return sessionRepository.createSession(session);
+    public void createSession(Session session) {
+        sessionRepository.createSession(session);
     }
 
     public List<Session> getActiveSessions() { return sessionRepository.getActiveSessions(); }

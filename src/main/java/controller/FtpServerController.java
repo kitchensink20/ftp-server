@@ -1,24 +1,19 @@
 package controller;
 
-import fileHandling.FileHandler;
 import logger.Logger;
 import model.Session;
 import model.User;
-import myFtpServer.protocol.FtpResponse;
 import service.*;
-import userMemento.UserCaretaker;
-import userMemento.UserMemento;
-import view.UI;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
 public class FtpServerController {
-    private final UserService userService = new UserService();
-    private final SessionService sessionService = new SessionService();
-    private final FileService fileService = new FileService();
-    private final AuthenticationService authenticationService = new AuthenticationService(userService, sessionService);;
+    private final UserService userService = UserService.getUserService();
+    private final SessionService sessionService = SessionService.getSessionService();
+    private final FileService fileService = FileService.getFileService();
+    private final AuthenticationService authenticationService = AuthenticationService.getAuthenticationService();
 
     public boolean newUserCanConnect(int maxConnectionNum) {
         List<Session> activeSessions = sessionService.getActiveSessions();

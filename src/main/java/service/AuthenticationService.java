@@ -8,12 +8,16 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class AuthenticationService {
-    private UserService userService;
-    private SessionService sessionService;
+    private final UserService userService = UserService.getUserService();
+    private final SessionService sessionService = SessionService.getSessionService();
+    private static AuthenticationService authenticationService;
 
-    public AuthenticationService(UserService userService, SessionService sessionService) {
-        this.userService = userService;
-        this.sessionService = sessionService;
+    private AuthenticationService() { }
+
+    public static AuthenticationService getAuthenticationService() {
+        if(authenticationService == null)
+            authenticationService = new AuthenticationService();
+        return authenticationService;
     }
 
     public boolean userExists(String username) {

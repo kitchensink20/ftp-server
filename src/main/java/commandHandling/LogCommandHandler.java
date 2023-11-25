@@ -9,6 +9,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class LogCommandHandler extends BaseCommandHandler {
+    private final UI ui;
+
+    public LogCommandHandler(UI ui) {
+        this.ui = ui;
+    }
+
     @Override
     protected boolean authorize(User user) {
         return user != null && user.getIsAdmin();

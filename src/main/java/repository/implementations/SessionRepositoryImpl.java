@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SessionRepositoryImpl implements SessionRepository {
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public SessionRepositoryImpl(){
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");

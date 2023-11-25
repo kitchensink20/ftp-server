@@ -1,6 +1,7 @@
 package myFtpServer;
 
 import controller.FtpServerController;
+import enums.FtpServerMode;
 import logger.Logger;
 import model.User;
 import myFtpServer.ftpServerStates.FtpServerState;
@@ -17,26 +18,30 @@ public class FtpServer {
     private static final int PORT = 21;
     private static final int MAX_CONNECTION_NUM = 10;
     private final FtpServerController controller = new FtpServerController();
+    private Socket clientSocket;
+    private ServerSocket dataServerSocket;
     private UI ui;
     private final Logger logger;
     private User currentUser;
     private FtpServerState serverState;
+    private FtpServerMode ftpServerMode;
 
     public FtpServer() throws IOException {
         logger = Logger.getLogger();
+        ftpServerMode = FtpServerMode.ACTIVE;
     }
 
     public void start() {
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+            ServerSocket comandServerSocket = new ServerSocket(PORT);
             System.out.println("FTP server started on port " + PORT);
 
             while (true) {
-                Socket clientSocket = serverSocket.accept();
+                clientSocket = comandServerSocket.accept();
                 System.out.println("Client connected: " + clientSocket.getInetAddress().getHostAddress());
 
-                ui = UI.getUI(clientSocket.getInputStream(), clientSocket.getOutputStream());
-                serverState = new NotLoggedInServerState(this, clientSocket);
+                ui = new UI(clientSocket.getInputStream(), clientSocket.getOutputStream());
+                serverState = new NotLoggedInServerState(this);
                 Thread clientThread = new Thread(() -> handleClient(clientSocket));
                 clientThread.start();
             }
@@ -57,6 +62,7 @@ public class FtpServer {
             currentUser = new User();
             while(true) {
                 String userInput = ui.acceptUserInput();
+                System.out.println(userInput);
                 FtpRequest ftpRequest = new FtpRequest(userInput);
                 FtpResponse ftpResponse = handleCommands(currentUser, ftpRequest);
                 ui.displayFtpResponse(ftpResponse);
@@ -88,7 +94,29 @@ public class FtpServer {
         this.serverState = ftpServerState;
     }
 
+    public void SetPassiveMode() {
+        ftpServerMode = FtpServerMode.PASSIVE;
+    }
+
+    public void setActiveMode() {
+        ftpServerMode = FtpServerMode.ACTIVE;
+    }
+
+    public void setUser(User loggedInUser) {
+        currentUser.setUserId(loggedInUser.getUserId());
+        currentUser.setUsername(loggedInUser.getUsername());
+        currentUser.setPassword(loggedInUser.getPassword());
+        currentUser.setHomeDirectory(loggedInUser.getHomeDirectory());
+        currentUser.setAdmin(loggedInUser.getIsAdmin());
+    }
+
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
     public FtpServerController getController() {
         return controller;
     }
+
+    public UI getUi() { return ui; }
 }

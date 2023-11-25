@@ -2,11 +2,16 @@ package commandHandling;
 
 import model.User;
 import myFtpServer.protocol.FtpResponse;
-import view.UI;
 
 import java.io.IOException;
 
 public class PwdCommandHandler extends BaseCommandHandler{
+    private final String currentDirectory;
+
+    public PwdCommandHandler(String currentDirectory) {
+        this.currentDirectory = currentDirectory;
+    }
+
     @Override
     protected boolean authorize(User user) {
         return user != null;
@@ -14,7 +19,6 @@ public class PwdCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        // TO MODIFY (not working properly for now)
-        return new FtpResponse(257, user.getHomeDirectory() + "\\ is the current directory");
+        return new FtpResponse(257, currentDirectory + "\\ is the current directory");
     }
 }

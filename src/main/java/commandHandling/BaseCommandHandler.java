@@ -7,8 +7,6 @@ import view.UI;
 import java.io.IOException;
 
 public abstract class BaseCommandHandler {
-    protected UI ui = UI.getUI();
-
     public final FtpResponse handleCommand(String arguments, User user) throws IOException {
         if(authorize(user))
             return executeCommand(arguments, user);

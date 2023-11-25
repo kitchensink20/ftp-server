@@ -9,39 +9,54 @@ import java.util.Collections;
 import java.util.List;
 
 public class FileService {
-    private FileRepository fileRepository;
-    public FileService() {
+    private static FileService fileService;
+    private final FileRepository fileRepository;
+
+    private FileService() {
         this.fileRepository = new FileRepositoryImpl();
+    }
+
+    public static FileService getFileService() {
+        if(fileService == null)
+            fileService = new FileService();
+        return fileService;
     }
 
     public File getById(int fielId) {
         return fileRepository.getById(fielId);
     }
+
     public List<File> getByUserId(int userId) {
         return fileRepository.getByUserId(userId);
     }
+
     public File createFile(File file) {
         return fileRepository.createFile(file);
     }
+
     public File updateFile(File modifiedFile) {
         return fileRepository.updateFile(modifiedFile);
     }
-    public void deleteFile(int fileId) {
-        fileRepository.deleteFile(fileId);
+
+    public void deleteById(int fileId) {
+        fileRepository.deleteById(fileId);
     }
-    public List<File> getAllUserFiles(User user) {
-        if(user != null)
-            return user.getFiles();
-        return Collections.emptyList();
+
+    public boolean fileBelongsToUser(User user, String fileName) {
+        List<model.File> userFiles = fileRepository.getByUserId(user.getUserId());
+
+        for(model.File file : userFiles)
+            if(file.getName().equals(fileName))
+                return true;
+
+        return false;
     }
+
     public void deleteFileByUserAndFileName(User user, String fileName) {
-        if(user != null) {
-            for(File file : user.getFiles()) {
-                if(file.getName().equals(fileName)){
-                    fileRepository.deleteFile(file.getFileId());
-                    break;
-                }
-            }
-        }
+        List<model.File> userFiles = fileRepository.getByUserId(user.getUserId());
+
+        for(model.File file : userFiles)
+            if(file.getName().equals(fileName))
+                fileRepository.deleteById(file.getFileId());
     }
 }

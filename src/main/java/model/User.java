@@ -5,6 +5,7 @@ import userMemento.UserMemento;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -26,10 +27,9 @@ public class User {
     private String homeDirectory;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<File> files = new ArrayList<>();
+    private final List<File> files = new ArrayList<>();
 
-    public User() {
-    }
+    public User() { }
 
     public User(String username, String password, boolean isAdmin, String homeDirectory) {
         this.username = username;
@@ -64,6 +64,7 @@ public class User {
     public String getHomeDirectory() {
         return homeDirectory;
     }
+
     public List<File> getFiles() {
         return files;
     }
@@ -103,5 +104,13 @@ public class User {
     @Override
     public String toString() {
         return "User{ userId=" + userId + ", username=" + username + ", isAdmin=" + isAdmin + ", homeDirectory=" + homeDirectory + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId && isAdmin == user.isAdmin && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(homeDirectory, user.homeDirectory) && Objects.equals(files, user.files);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public UserRepositoryImpl(){
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");

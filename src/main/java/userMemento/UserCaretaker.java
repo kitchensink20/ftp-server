@@ -3,7 +3,7 @@ package userMemento;
 import java.util.*;
 
 public class UserCaretaker {
-    private List<UserMemento> mementoList = new ArrayList<>();
+    private final List<UserMemento> mementoList = new ArrayList<>();
 
     public void saveNewMemento(UserMemento userMemento) {
         mementoList.add(userMemento);

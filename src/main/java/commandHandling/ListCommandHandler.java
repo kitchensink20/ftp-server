@@ -2,14 +2,24 @@ package commandHandling;
 
 import model.User;
 import myFtpServer.protocol.FtpResponse;
+import view.UI;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
 
 public class ListCommandHandler extends BaseCommandHandler{
+    private final ServerSocket dataServerSocket;
+    private final String currentDirectory;
+
+    public ListCommandHandler(ServerSocket dataServerSocket, String currentDirectory) {
+        this.dataServerSocket = dataServerSocket;
+        this.currentDirectory = currentDirectory;
+    }
+
     @Override
     protected boolean authorize(User user) {
         return user != null;
@@ -17,14 +27,32 @@ public class ListCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        // TO MODIFY (not working properly for now)
-        Path currentDirectory = Paths.get(user.getHomeDirectory()).toAbsolutePath();
-        try(DirectoryStream<Path> stream = Files.newDirectoryStream(currentDirectory)) {
-            for(Path file : stream)
-                ui.displayDirectoryContent(String.valueOf(file.getFileName()));
-            return new FtpResponse(226, "Transfer complete");
-        } catch (IOException e) {
-            return new FtpResponse(550, "Can't lust directory content");
+        System.out.println("Curr dir in list " + currentDirectory);
+
+        Socket dataClient = dataServerSocket.accept();
+
+        PrintWriter dataOutput = new PrintWriter(dataClient.getOutputStream(), true);
+
+        File directory = new File(currentDirectory);
+        File[] files = directory.listFiles();
+
+        for(File file : files) {
+            dataOutput.println(getFileInfo(file));
         }
+
+        dataOutput.close();
+        dataClient.close();
+
+        return new FtpResponse(226, "Transfer complete");
+    }
+
+    private String getFileInfo(File file) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+
+        String date = sdf.format(file.lastModified());
+        String size = (file.isDirectory() ? "<DIR>" : String.valueOf(file.length()));
+        String name = file.getName();
+
+        return String.format("%s %10s %s", date, size, name);
     }
 }

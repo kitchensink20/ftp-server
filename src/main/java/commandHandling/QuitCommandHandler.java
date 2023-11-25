@@ -3,12 +3,10 @@ package commandHandling;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.AuthenticationService;
-import service.SessionService;
-import service.UserService;
 import java.io.IOException;
 
 public class QuitCommandHandler extends BaseCommandHandler{
-    private final AuthenticationService authenticationService = new AuthenticationService(new UserService(), new SessionService());
+    private final AuthenticationService authenticationService = AuthenticationService.getAuthenticationService();
 
     @Override
     protected boolean authorize(User user) {

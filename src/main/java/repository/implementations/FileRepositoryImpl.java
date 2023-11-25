@@ -7,7 +7,8 @@ import repository.interfaces.FileRepository;
 import java.util.List;
 
 public class FileRepositoryImpl implements FileRepository {
-    private EntityManager entityManager;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     public FileRepositoryImpl() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
@@ -47,7 +48,7 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public void deleteFile(int fileId) {
+    public void deleteById(int fileId) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         File file = entityManager.find(File.class, fileId);

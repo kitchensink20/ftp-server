@@ -9,5 +9,5 @@ public interface FileRepository {
     List<File> getByUserId(int userId);
     File createFile(File file);
     File updateFile(File modifiedFile);
-    void deleteFile(int fileId);
+    void deleteById(int fileId);
 }

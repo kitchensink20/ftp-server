@@ -7,9 +7,17 @@ import repository.interfaces.UserRepository;
 import java.util.List;
 
 public class UserService {
-    UserRepository userRepository;
-    public UserService() {
+    private final UserRepository userRepository;
+    private static UserService userService;
+
+    private UserService() {
         this.userRepository = new UserRepositoryImpl();
+    }
+
+    public static UserService getUserService() {
+        if(userService == null)
+            userService = new UserService();
+        return userService;
     }
 
     public User getById(int id) {
@@ -30,7 +38,7 @@ public class UserService {
         return userRepository.updateUser(modifiedUser);
     }
 
-    public void deleteUser(int userId) {
+    public void deleteById(int userId) {
         userRepository.deleteUser(userId);
     }
 }

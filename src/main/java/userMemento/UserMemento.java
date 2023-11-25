@@ -1,11 +1,11 @@
 package userMemento;
 
 public class UserMemento {
-    private int userId;
-    private String username;
-    private String password;
-    private boolean isAdmin;
-    private String homeDirectory;
+    private final int userId;
+    private final String username;
+    private final String password;
+    private final boolean isAdmin;
+    private final String homeDirectory;
 
     public UserMemento(int userId, String username, String password, boolean isAdmin, String homeDirectory) {
         this.userId = userId;
