@@ -27,8 +27,6 @@ public class ListCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        System.out.println("Curr dir in list " + currentDirectory);
-
         Socket dataClient = dataServerSocket.accept();
 
         PrintWriter dataOutput = new PrintWriter(dataClient.getOutputStream(), true);
@@ -36,9 +34,8 @@ public class ListCommandHandler extends BaseCommandHandler{
         File directory = new File(currentDirectory);
         File[] files = directory.listFiles();
 
-        for(File file : files) {
+        for(File file : files)
             dataOutput.println(getFileInfo(file));
-        }
 
         dataOutput.close();
         dataClient.close();

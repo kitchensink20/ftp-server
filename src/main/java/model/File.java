@@ -40,10 +40,6 @@ public class File {
         return owner;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
         return "fileId - " + fileId + "; name - " + name;

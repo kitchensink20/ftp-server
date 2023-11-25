@@ -35,7 +35,7 @@ public class UserLoggedInServerState implements FtpServerState {
                 commandHandler = new RetrCommandHandler(dataServerSocket);
                 break;
             case "STOR": // to store file on server
-                commandHandler = new StorCommandHandler();
+                commandHandler = new StorCommandHandler(dataServerSocket);
                 break;
             case "DELE": // to delete a file
                 commandHandler = new DeleCommandHandler(user.getHomeDirectory());

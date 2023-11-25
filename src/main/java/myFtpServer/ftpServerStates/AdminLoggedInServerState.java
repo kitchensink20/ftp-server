@@ -28,14 +28,13 @@ public class AdminLoggedInServerState implements FtpServerState {
         String command = ftpRequest.getCommand();
         String arguments = ftpRequest.getArguments();
 
-        System.out.println("currDir in admin state: " + currentDirectoryPath);
         BaseCommandHandler commandHandler;
         switch (command) {
             case "RETR": // to retrieve file from the server
                 commandHandler = new RetrCommandHandler(dataSocket);
                 break;
             case "STOR": // to store file on server
-                commandHandler = new StorCommandHandler();
+                commandHandler = new StorCommandHandler(dataSocket);
                 break;
             case "DELE": // to delete a file
                 commandHandler = new DeleCommandHandler(currentDirectoryPath.toString());

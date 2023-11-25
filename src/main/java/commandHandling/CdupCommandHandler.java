@@ -2,7 +2,6 @@ package commandHandling;
 
 import model.User;
 import myFtpServer.protocol.FtpResponse;
-import view.UI;
 
 import java.io.IOException;
 import java.nio.file.Path;

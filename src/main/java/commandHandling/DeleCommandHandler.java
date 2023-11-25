@@ -3,10 +3,9 @@ package commandHandling;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.FileService;
-import service.UserService;
 
 import java.io.*;
-import java.util.*;
+
 
 public class DeleCommandHandler extends BaseCommandHandler{
     private final String currentDirPath;
@@ -30,9 +29,8 @@ public class DeleCommandHandler extends BaseCommandHandler{
         File fileToDelete;
         if(arguments.split("\\\\").length == 1)
             fileToDelete = new File(currentDirPath, arguments);
-        else {
+        else
             fileToDelete = new File(arguments);
-        }
 
         if(!fileToDelete.exists())
             return new FtpResponse(404, "File not found");

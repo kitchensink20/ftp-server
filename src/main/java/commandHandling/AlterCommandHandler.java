@@ -31,7 +31,7 @@ public class AlterCommandHandler extends BaseCommandHandler {
             return new FtpResponse(501, "Syntax error in parameters or arguments. Try like this: ALTER -username [[new username]] / ALTER -password [[new password]]");
     }
 
-    private FtpResponse changeUsername(User user, String newUsername) throws IOException {
+    private FtpResponse changeUsername(User user, String newUsername) {
         boolean usernameIsBusy = userService.getByUsername(newUsername) != null;
         if(usernameIsBusy)
             return new FtpResponse(501, "Syntax error in parameters or arguments. Username is already occupied");
@@ -42,7 +42,7 @@ public class AlterCommandHandler extends BaseCommandHandler {
         return new FtpResponse(200, "User successfully updated");
     }
 
-    private FtpResponse changePassword(User user, String newPassword) throws IOException {
+    private FtpResponse changePassword(User user, String newPassword) {
         boolean passwordsTheSame  = user.getPassword().equals(newPassword);
         if(passwordsTheSame)
             return new FtpResponse(501, "Syntax error in parameters or arguments. Password is the same");

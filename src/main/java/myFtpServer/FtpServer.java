@@ -62,6 +62,9 @@ public class FtpServer {
             currentUser = new User();
             while(true) {
                 String userInput = ui.acceptUserInput();
+                if(userInput == null || userInput.isEmpty())
+                    break;
+
                 System.out.println(userInput);
                 FtpRequest ftpRequest = new FtpRequest(userInput);
                 FtpResponse ftpResponse = handleCommands(currentUser, ftpRequest);
