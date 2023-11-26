@@ -14,8 +14,8 @@ import java.net.Socket;
 public class AdminLoggedInServerState implements FtpServerState {
     private final UI ui;
     private final Socket clientSocket;
-    private StringBuilder currentDirectoryPath;
-    private ServerSocket dataSocket;
+    private final StringBuilder currentDirectoryPath;
+    private ServerSocket dataServerSocket;
 
     public AdminLoggedInServerState(FtpServer ftpServer, String currentDirectoryPath) {
         this.currentDirectoryPath =  new StringBuilder(currentDirectoryPath);
@@ -31,10 +31,10 @@ public class AdminLoggedInServerState implements FtpServerState {
         BaseCommandHandler commandHandler;
         switch (command) {
             case "RETR": // to retrieve file from the server
-                commandHandler = new RetrCommandHandler(dataSocket);
+                commandHandler = new RetrCommandHandler(dataServerSocket);
                 break;
             case "STOR": // to store file on server
-                commandHandler = new StorCommandHandler(dataSocket);
+                commandHandler = new StorCommandHandler(dataServerSocket);
                 break;
             case "DELE": // to delete a file
                 commandHandler = new DeleCommandHandler(currentDirectoryPath.toString());
@@ -45,11 +45,14 @@ public class AdminLoggedInServerState implements FtpServerState {
             case "CDUP": // to change to the parent of the current directory
                 commandHandler = new CdupCommandHandler(currentDirectoryPath);
                 break;
-            case "ERPT":
-                commandHandler = new ErptCommandHandler();
+            case "PORT": // to enter active mode
+                commandHandler = new PortCommandHandler(); // !!! do not work for now
+                break;
+            case "EPRT": // to enter active mode
+                commandHandler = new EprtCommandHandler(); // !!! do not work for now
                 break;
             case "LIST": // to list files in a directory
-                commandHandler = new ListCommandHandler(dataSocket, currentDirectoryPath.toString());
+                commandHandler = new ListCommandHandler(dataServerSocket, currentDirectoryPath.toString());
                 break;
             case "CWD": // to change the current directory to the specified one
                 commandHandler = new CwdCommandHandler(currentDirectoryPath);
@@ -57,13 +60,13 @@ public class AdminLoggedInServerState implements FtpServerState {
             case "PWD": // to print the current working directory
                 commandHandler = new PwdCommandHandler(currentDirectoryPath.toString());
                 break;
-            case "PASV":
-                dataSocket = new ServerSocket(0);
-                commandHandler = new PasvCommandHandler(clientSocket, dataSocket);
+            case "PASV": // to enter the passive mode
+                dataServerSocket = new ServerSocket(0);
+                commandHandler = new PasvCommandHandler(clientSocket, dataServerSocket);
                 break;
-            case "EPSV":
-                dataSocket = new ServerSocket(0);
-                commandHandler = new EpsvCommandHandler(dataSocket);
+            case "EPSV": // to enter the extended passive mode
+                dataServerSocket = new ServerSocket(0);
+                commandHandler = new EpsvCommandHandler(dataServerSocket);
                 break;
             case "CREATE": // to create new user; used with arguments [[username, password, isAdmin]]
                 commandHandler = new CreateCommandHandler();
@@ -80,7 +83,7 @@ public class AdminLoggedInServerState implements FtpServerState {
                 return new FtpResponse(215, "NAME " + System.getProperty("os.name") + " VERSION " + System.getProperty("os.version"));
             case "QUIT": // to end session
                 commandHandler = new QuitCommandHandler();
-                dataSocket.close();
+                dataServerSocket.close();
                 clientSocket.close();
                 break;
             default:

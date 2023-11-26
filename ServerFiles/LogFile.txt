@@ -91,3 +91,31 @@ LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-25T23:28.
 LOG IN: Client 0:0:0:0:0:0:0:1 loged in as ivan at 2023-11-25T23:28.
 LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-25T23:28.
 LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as ivan at 2023-11-25T23:28.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as ivan at 2023-11-25T23:53.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-25T23:59.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:28.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:28.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:28.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:28.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:28.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:28.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:28.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:29.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:30.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:39.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as null at 2023-11-26T00:39.
+ERROR: At 2023-11-26T00:39 client 0:0:0:0:0:0:0:1 logged as null faced this error: Socket closed
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as null at 2023-11-26T00:39.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:39.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:40.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:40.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:40.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:40.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:40.
+ERROR: At 2023-11-26T00:40 client 0:0:0:0:0:0:0:1 logged as alina faced this error: Stream closed
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:40.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:41.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:43.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:43.
+LOG IN: Client 0:0:0:0:0:0:0:1 loged in as alina at 2023-11-26T00:43.
+LOG OUT: Client 0:0:0:0:0:0:0:1 logged out as alina at 2023-11-26T00:45.

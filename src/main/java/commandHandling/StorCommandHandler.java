@@ -8,7 +8,6 @@ import service.FileService;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class StorCommandHandler extends BaseCommandHandler{

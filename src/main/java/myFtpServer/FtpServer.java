@@ -1,7 +1,6 @@
 package myFtpServer;
 
 import controller.FtpServerController;
-import enums.FtpServerMode;
 import logger.Logger;
 import model.User;
 import myFtpServer.ftpServerStates.FtpServerState;
@@ -24,11 +23,9 @@ public class FtpServer {
     private final Logger logger;
     private User currentUser;
     private FtpServerState serverState;
-    private FtpServerMode ftpServerMode;
 
     public FtpServer() throws IOException {
         logger = Logger.getLogger();
-        ftpServerMode = FtpServerMode.ACTIVE;
     }
 
     public void start() {
@@ -95,14 +92,6 @@ public class FtpServer {
 
     public void setState(FtpServerState ftpServerState) {
         this.serverState = ftpServerState;
-    }
-
-    public void SetPassiveMode() {
-        ftpServerMode = FtpServerMode.PASSIVE;
-    }
-
-    public void setActiveMode() {
-        ftpServerMode = FtpServerMode.ACTIVE;
     }
 
     public void setUser(User loggedInUser) {

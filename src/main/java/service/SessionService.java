@@ -40,7 +40,9 @@ public class SessionService {
         return Collections.emptyList();
     }
 
-    public Session modifySessionStatus(int sessionId) { return sessionRepository.updateSessionStatus(sessionId); }
+    public void modifySessionStatus(int sessionId) {
+        sessionRepository.updateSessionStatus(sessionId);
+    }
 
     public void deleteSession(int sessionId) {
         sessionRepository.deleteSession(sessionId);

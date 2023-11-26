@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.List;
 
 public class UI {
-    private static UI ui;
     private final BufferedReader reader;
     private final BufferedWriter writer;
 
@@ -22,12 +21,6 @@ public class UI {
 
     public void displayFtpResponse(FtpResponse ftpResponse) throws IOException {
         writer.write(ftpResponse.toString());
-        writer.newLine();
-        writer.flush();
-    }
-
-    public void displayDirectoryContent(String fileName) throws IOException {
-        writer.write(fileName);
         writer.newLine();
         writer.flush();
     }

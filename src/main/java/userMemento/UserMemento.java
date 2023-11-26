@@ -18,15 +18,19 @@ public class UserMemento {
     public int getUserId() {
         return userId;
     }
+
     public String getUsername() {
         return username;
     }
+
     public String getPassword() {
         return password;
     }
+
     public boolean isAdmin() {
         return isAdmin;
     }
+
     public String getHomeDirectory() {
         return homeDirectory;
     }

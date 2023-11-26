@@ -48,19 +48,20 @@ public class UserLoggedInServerState implements FtpServerState {
             case "LIST": // to list files in a directory
                 commandHandler = new ListCommandHandler(dataServerSocket, user.getHomeDirectory());
                 break;
-            case "ERPT":
-                commandHandler = new ErptCommandHandler();
+            case "PORT": // to enter active mode
+                commandHandler = new PortCommandHandler(); // !!! do not work for now
+                break;
+            case "EPRT": // to enter active mode
+                commandHandler = new EprtCommandHandler(); // !!! do not work for now
                 break;
             case "PWD":  // to print the current working directory
                 commandHandler = new PwdCommandHandler(user.getHomeDirectory());
                 break;
-            //case "CWD": // to change the current directory to the specified one
-              //  return new FtpResponse(550, "Permission denied");
-            case "PASV":
+            case "PASV":  // to enter the passive mode
                 dataServerSocket = new ServerSocket(0);
                 commandHandler = new PasvCommandHandler(clientSocket, dataServerSocket);
                 break;
-            case "EPSV":
+            case "EPSV": // to enter the extended passive mode
                 dataServerSocket = new ServerSocket(0);
                 commandHandler = new EpsvCommandHandler(dataServerSocket);
                 break;
