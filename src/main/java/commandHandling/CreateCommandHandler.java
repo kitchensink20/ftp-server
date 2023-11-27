@@ -3,6 +3,7 @@ package commandHandling;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.UserService;
+import visitor.CreateVisitor;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class CreateCommandHandler extends BaseCommandHandler{
             return new FtpResponse(501, "Syntax error in parameters or arguments. Username is already occupied");
 
         User newUser = new User(username, password, isAdmin);
-        userService.createUser(newUser);
+        newUser.accept(new CreateVisitor());
         return new FtpResponse(230, "User successfully created");
     }
 }

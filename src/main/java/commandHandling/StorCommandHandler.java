@@ -4,15 +4,15 @@ import model.File;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.FileService;
+import visitor.CreateVisitor;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Paths;
 
-public class StorCommandHandler extends BaseCommandHandler{
+public class StorCommandHandler extends BaseCommandHandler {
     private final ServerSocket dataServerSocket;
-    private final FileService fileService = FileService.getFileService();
 
     public StorCommandHandler(ServerSocket dataServerSocket){
         this.dataServerSocket = dataServerSocket;
@@ -29,8 +29,6 @@ public class StorCommandHandler extends BaseCommandHandler{
             return new FtpResponse(501, "Syntax error in parameters or arguments");
 
         String filePath = getFilePathFromArgs(arguments, user);
-
-        System.out.println("ekf[wekfwe " + filePath);
 
         Socket dataSocket = dataServerSocket.accept();
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
@@ -68,6 +66,7 @@ public class StorCommandHandler extends BaseCommandHandler{
         String fileName = pathSplit[pathSplit.length - 1];
         String fileLocation = filePath.substring(0, lastOccuranceOfDelimiterIndx);
 
-        fileService.createFile(new File(fileName, fileLocation, user));
+        File newFile = new File(fileName, fileLocation, user);
+        newFile.accept(new CreateVisitor());
     }
 }

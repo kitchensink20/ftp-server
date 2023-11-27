@@ -18,7 +18,6 @@ public class FtpServer {
     private static final int MAX_CONNECTION_NUM = 10;
     private final FtpServerController controller = new FtpServerController();
     private Socket clientSocket;
-    private ServerSocket dataServerSocket;
     private UI ui;
     private final Logger logger;
     private User currentUser;

@@ -30,6 +30,16 @@ public class FileService {
         return fileRepository.getByUserId(userId);
     }
 
+    public File getFileByUserAndFileName(User user, String fileName) {
+        List<model.File> userFiles = fileRepository.getByUserId(user.getUserId());
+
+        for(model.File file : userFiles)
+            if(file.getName().equals(fileName))
+                return file;
+
+        return null;
+    }
+
     public File createFile(File file) {
         return fileRepository.createFile(file);
     }
@@ -40,23 +50,5 @@ public class FileService {
 
     public void deleteById(int fileId) {
         fileRepository.deleteById(fileId);
-    }
-
-    public boolean fileBelongsToUser(User user, String fileName) {
-        List<model.File> userFiles = fileRepository.getByUserId(user.getUserId());
-
-        for(model.File file : userFiles)
-            if(file.getName().equals(fileName))
-                return true;
-
-        return false;
-    }
-
-    public void deleteFileByUserAndFileName(User user, String fileName) {
-        List<model.File> userFiles = fileRepository.getByUserId(user.getUserId());
-
-        for(model.File file : userFiles)
-            if(file.getName().equals(fileName))
-                fileRepository.deleteById(file.getFileId());
     }
 }

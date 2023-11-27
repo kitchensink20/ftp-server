@@ -3,9 +3,9 @@ package commandHandling;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 import service.FileService;
+import visitor.DeleteVisitor;
 
 import java.io.*;
-
 
 public class DeleCommandHandler extends BaseCommandHandler{
     private final String currentDirPath;
@@ -26,11 +26,7 @@ public class DeleCommandHandler extends BaseCommandHandler{
             return new FtpResponse(501, "Syntax error in parameters or arguments");
 
         String fileName = getFileNameFromArgs(arguments);
-        File fileToDelete;
-        if(arguments.split("\\\\").length == 1)
-            fileToDelete = new File(currentDirPath, arguments);
-        else
-            fileToDelete = new File(arguments);
+        File fileToDelete = new File(currentDirPath, fileName);
 
         if(!fileToDelete.exists())
             return new FtpResponse(404, "File not found");
@@ -38,12 +34,10 @@ public class DeleCommandHandler extends BaseCommandHandler{
         if(fileToDelete.isDirectory())
             return new FtpResponse(550, "Permission denied");
 
-        if (!fileService.fileBelongsToUser(user, fileName))
-            return new FtpResponse(550, "Permission denied");
-
         boolean deletedSuccessfully = fileToDelete.delete();
         if(deletedSuccessfully){
-            fileService.deleteFileByUserAndFileName(user, fileName);
+            model.File fileModel = fileService.getFileByUserAndFileName(user, fileName);
+            fileModel.accept(new DeleteVisitor());
             return new FtpResponse(204, "File deleted successfully");
         }
         else

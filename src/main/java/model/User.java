@@ -2,6 +2,8 @@ package model;
 
 import jakarta.persistence.*;
 import userMemento.UserMemento;
+import visitor.Visitable;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Visitable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -112,5 +114,10 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return userId == user.userId && isAdmin == user.isAdmin && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(homeDirectory, user.homeDirectory) && Objects.equals(files, user.files);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }
