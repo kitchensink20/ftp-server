@@ -1,6 +1,5 @@
 package commandHandling;
 
-import com.mysql.cj.xdevapi.Client;
 import model.User;
 import myFtpServer.protocol.FtpResponse;
 
@@ -11,7 +10,7 @@ import java.net.Socket;
 
 public class PasvCommandHandler extends BaseCommandHandler{
     private final Socket clientSocket;
-    private ServerSocket passiveSocket;
+    private final ServerSocket passiveSocket;
 
     public PasvCommandHandler(Socket clientSocket, ServerSocket passiveSocket) {
         this.clientSocket = clientSocket;

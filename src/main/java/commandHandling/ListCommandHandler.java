@@ -2,21 +2,19 @@ package commandHandling;
 
 import model.User;
 import myFtpServer.protocol.FtpResponse;
-import view.UI;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 
 public class ListCommandHandler extends BaseCommandHandler{
-    private final ServerSocket dataServerSocket;
+    private final Socket dataSocket;
     private final String currentDirectory;
 
-    public ListCommandHandler(ServerSocket dataServerSocket, String currentDirectory) {
-        this.dataServerSocket = dataServerSocket;
+    public ListCommandHandler(Socket dataSocket, String currentDirectory) {
+        this.dataSocket = dataSocket;
         this.currentDirectory = currentDirectory;
     }
 
@@ -27,9 +25,7 @@ public class ListCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        Socket dataClient = dataServerSocket.accept();
-
-        PrintWriter dataOutput = new PrintWriter(dataClient.getOutputStream(), true);
+        PrintWriter dataOutput = new PrintWriter(dataSocket.getOutputStream(), true);
 
         File directory = new File(currentDirectory);
         File[] files = directory.listFiles();
@@ -38,7 +34,7 @@ public class ListCommandHandler extends BaseCommandHandler{
             dataOutput.println(getFileInfo(file));
 
         dataOutput.close();
-        dataClient.close();
+        dataSocket.close();
 
         return new FtpResponse(226, "Transfer complete");
     }

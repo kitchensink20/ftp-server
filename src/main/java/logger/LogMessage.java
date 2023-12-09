@@ -6,17 +6,9 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 public class LogMessage {
-    private String clientAddress;
-    private String username;
-    private LocalDateTime eventTime;
-    private String additionalInfo;
-    private String resultMessage;
+    private final String resultMessage;
 
     private LogMessage(ConnectionLogBuilder builder) {
-        this.clientAddress = builder.clientAddress;
-        this.username = builder.username;
-        this.eventTime = builder.eventTime;
-        this.additionalInfo = builder.additionalInfo;
         this.resultMessage = builder.resultMessage;
     }
 

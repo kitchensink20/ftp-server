@@ -12,10 +12,12 @@ import java.net.Socket;
 import java.nio.file.Paths;
 
 public class StorCommandHandler extends BaseCommandHandler {
-    private final ServerSocket dataServerSocket;
+    private final Socket dataSocket;
+    private final String currentDir;
 
-    public StorCommandHandler(ServerSocket dataServerSocket){
-        this.dataServerSocket = dataServerSocket;
+    public StorCommandHandler(Socket dataSocket, String currentDir) {
+        this.currentDir = currentDir;
+        this.dataSocket = dataSocket;
     }
 
     @Override
@@ -28,9 +30,8 @@ public class StorCommandHandler extends BaseCommandHandler {
         if(arguments == null || arguments.isEmpty())
             return new FtpResponse(501, "Syntax error in parameters or arguments");
 
-        String filePath = getFilePathFromArgs(arguments, user);
+        String filePath = getFilePathFromArgs(arguments);
 
-        Socket dataSocket = dataServerSocket.accept();
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
         InputStream inputStream = dataSocket.getInputStream();
@@ -43,18 +44,18 @@ public class StorCommandHandler extends BaseCommandHandler {
 
         bufferedOutputStream.close();
         dataSocket.close();
-        dataServerSocket.close();
+        dataSocket.close();
 
         createFileRecordInDb(user, filePath);
 
         return new FtpResponse(200, "File " + arguments + " was received successfully");
     }
 
-    private String getFilePathFromArgs(String arguments, User user) {
+    private String getFilePathFromArgs(String arguments) {
         String[] argumentsSplit = arguments.split("\\\\");
 
         if(argumentsSplit.length == 1)
-            return Paths.get(user.getHomeDirectory(), arguments).toAbsolutePath().toString();
+            return Paths.get(currentDir, arguments).toAbsolutePath().toString();
         else
             return arguments;
     }

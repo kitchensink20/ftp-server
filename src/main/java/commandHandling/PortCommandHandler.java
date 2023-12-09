@@ -4,15 +4,15 @@ import model.User;
 import myFtpServer.protocol.FtpResponse;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.Socket;
 
-public class PortCommandHandler extends BaseCommandHandler{
+public class PortCommandHandler extends BaseCommandHandler {
     @Override
     protected boolean authorize(User user) {
         return user != null;
     }
 
-    @Override // !!! do not work for now
+    @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
         if(arguments == null || arguments.isEmpty())
             return new FtpResponse(501, "Syntax error in parameters or arguments");
@@ -21,11 +21,19 @@ public class PortCommandHandler extends BaseCommandHandler{
         return new FtpResponse(229, " Entering Active Mode (|||" + port + "|)");
     }
 
-    private static int getPort(String arguments) {
-        String[] parts = arguments.split(",");
-        String ipAddress = String.join(".", parts[0], parts[1], parts[2], parts[3]);
-        int port = Integer.parseInt(parts[4]) * 256 + Integer.parseInt(parts[5]);
+    public Socket getDataSocket(String arguments) throws IOException {
+        String ipAddress = getIpAddress(arguments);
+        int port = getPort(arguments);
+        return new Socket(ipAddress, port);
+    }
 
-        return port;
+    private int getPort(String arguments) {
+        String[] parts = arguments.split(",");
+        return Integer.parseInt(parts[4]) * 256 + Integer.parseInt(parts[5]);
+    }
+
+    private String getIpAddress(String arguments) {
+        String[] parts = arguments.split(",");
+        return parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3];
     }
 }

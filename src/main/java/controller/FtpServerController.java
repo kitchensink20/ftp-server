@@ -10,9 +10,7 @@ import java.net.Socket;
 import java.util.List;
 
 public class FtpServerController {
-    private final UserService userService = UserService.getUserService();
     private final SessionService sessionService = SessionService.getSessionService();
-    private final FileService fileService = FileService.getFileService();
     private final AuthenticationService authenticationService = AuthenticationService.getAuthenticationService();
 
     public boolean newUserCanConnect(int maxConnectionNum) {

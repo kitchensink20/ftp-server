@@ -8,10 +8,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class RetrCommandHandler extends BaseCommandHandler{
-    private final ServerSocket dataServerSocket;
+    private final Socket dataSocket;
 
-    public RetrCommandHandler(ServerSocket dataServerSocket) {
-        this.dataServerSocket= dataServerSocket;
+    public RetrCommandHandler(Socket dataSocket) {
+        this.dataSocket = dataSocket;
     }
 
     @Override
@@ -21,8 +21,7 @@ public class RetrCommandHandler extends BaseCommandHandler{
 
     @Override
     protected FtpResponse executeCommand(String arguments, User user) throws IOException {
-        Socket dataClient = dataServerSocket.accept();
-        DataOutputStream dataOutputStream = new DataOutputStream(dataClient.getOutputStream());
+        DataOutputStream dataOutputStream = new DataOutputStream(dataSocket.getOutputStream());
         FtpResponse ftpResponse;
 
         try {
@@ -34,7 +33,7 @@ public class RetrCommandHandler extends BaseCommandHandler{
             ftpResponse = new FtpResponse(451, "Error sending file: " + arguments);
         } finally {
             dataOutputStream.close();
-            dataClient.close();
+            dataSocket.close();
         }
 
         return ftpResponse;
