@@ -25,14 +25,12 @@ public class CwdCommandHandler extends BaseCommandHandler{
 
         File adminFolder = new File(user.getHomeDirectory());
         File basicDir = new File(adminFolder.getParent());
-        System.out.println(basicDir.getAbsolutePath());
+
         File newDir;
         if(arguments.split("\\\\").length == 1)
             newDir = new File(basicDir, arguments);
         else
             newDir = new File(arguments);
-
-        System.out.println(newDir.getAbsolutePath());
 
         if(newDir.exists() && newDir.isDirectory()){
             currentDirectoryPath.setLength(0);

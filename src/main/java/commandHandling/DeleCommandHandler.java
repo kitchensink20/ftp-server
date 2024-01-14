@@ -6,6 +6,7 @@ import service.FileService;
 import visitor.DeleteVisitor;
 
 import java.io.*;
+import java.nio.file.Paths;
 
 public class DeleCommandHandler extends BaseCommandHandler{
     private final String currentDirPath;
@@ -25,8 +26,8 @@ public class DeleCommandHandler extends BaseCommandHandler{
         if(arguments == null || arguments.isEmpty())
             return new FtpResponse(501, "Syntax error in parameters or arguments");
 
-        String fileName = getFileNameFromArgs(arguments);
-        File fileToDelete = new File(currentDirPath, fileName);
+        String filePath = getFilePathFromArgs(arguments);
+        File fileToDelete = new File(filePath);
 
         if(!fileToDelete.exists())
             return new FtpResponse(404, "File not found");
@@ -36,7 +37,7 @@ public class DeleCommandHandler extends BaseCommandHandler{
 
         boolean deletedSuccessfully = fileToDelete.delete();
         if(deletedSuccessfully){
-            model.File fileModel = fileService.getFileByUserAndFileName(user, fileName);
+            model.File fileModel = fileService.getFileByUserAndFileName(user, fileToDelete.getName());
             fileModel.accept(new DeleteVisitor());
             return new FtpResponse(204, "File deleted successfully");
         }
@@ -44,11 +45,12 @@ public class DeleCommandHandler extends BaseCommandHandler{
             return new FtpResponse(409, "File could not be deleted");
     }
 
-    private String getFileNameFromArgs(String arguments) {
-        if(arguments.split("\\\\").length == 1)
-            return arguments;
-
+    private String getFilePathFromArgs(String arguments) {
         String[] argumentsSplit = arguments.split("\\\\");
-        return argumentsSplit[argumentsSplit.length - 1];
+
+        if(argumentsSplit.length == 1)
+            return Paths.get(currentDirPath, arguments).toAbsolutePath().toString();
+        else
+            return arguments;
     }
 }

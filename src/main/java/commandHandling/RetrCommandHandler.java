@@ -4,13 +4,15 @@ import model.User;
 import myFtpServer.protocol.FtpResponse;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Paths;
 
 public class RetrCommandHandler extends BaseCommandHandler{
     private final Socket dataSocket;
+    private final String currentDir;
 
-    public RetrCommandHandler(Socket dataSocket) {
+    public RetrCommandHandler(Socket dataSocket, String currentDir) {
+        this.currentDir = currentDir;
         this.dataSocket = dataSocket;
     }
 
@@ -25,11 +27,11 @@ public class RetrCommandHandler extends BaseCommandHandler{
         FtpResponse ftpResponse;
 
         try {
-            sendFile(arguments, dataOutputStream);
+            sendFile(getFilePath(arguments), dataOutputStream);
             ftpResponse = new FtpResponse(226, "File transfer complete");
         } catch (FileNotFoundException e) {
             ftpResponse = new FtpResponse(550, "File not found: " + arguments);
-        } catch (IOException e) {
+        } catch (IOException e ) {
             ftpResponse = new FtpResponse(451, "Error sending file: " + arguments);
         } finally {
             dataOutputStream.close();
@@ -39,7 +41,7 @@ public class RetrCommandHandler extends BaseCommandHandler{
         return ftpResponse;
     }
 
-    private static void sendFile(String filename, DataOutputStream dataOutputStream) throws IOException {
+    private void sendFile(String filename, DataOutputStream dataOutputStream) throws IOException {
         File file = new File(filename);
         FileInputStream fileIn = new FileInputStream(file);
         byte[] buffer = new byte[4096];
@@ -50,5 +52,14 @@ public class RetrCommandHandler extends BaseCommandHandler{
         }
 
         fileIn.close();
+    }
+
+    private String getFilePath(String arguments) {
+        String[] argumentsSplit = arguments.split("\\\\");
+
+        if(argumentsSplit.length == 1)
+            return Paths.get(currentDir, arguments).toAbsolutePath().toString();
+        else
+            return arguments;
     }
 }

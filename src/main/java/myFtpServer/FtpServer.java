@@ -64,6 +64,7 @@ public class FtpServer {
                 System.out.println(userInput);
                 FtpRequest ftpRequest = new FtpRequest(userInput);
                 FtpResponse ftpResponse = handleCommands(currentUser, ftpRequest);
+                System.out.println(ftpResponse.toString());
                 ui.displayFtpResponse(ftpResponse);
                 if(ftpResponse.getStatusCode() == 221)
                     break;

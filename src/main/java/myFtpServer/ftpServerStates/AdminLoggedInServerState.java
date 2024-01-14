@@ -35,9 +35,9 @@ public class AdminLoggedInServerState implements FtpServerState {
         switch (command) {
             case "RETR": // to retrieve file from the server
                 if(serverMode.equals(ServerMode.ACTIVE))
-                    commandHandler = new RetrCommandHandler(activeDataSocket);
+                    commandHandler = new RetrCommandHandler(activeDataSocket, currentDirectoryPath.toString());
                 else if(serverMode.equals(ServerMode.PASSIVE))
-                    commandHandler = new RetrCommandHandler(passiveDataServerSocket.accept());
+                    commandHandler = new RetrCommandHandler(passiveDataServerSocket.accept(), currentDirectoryPath.toString());
                 else
                     return new FtpResponse(425, "Can't open data connection. Choose FTP server mode");
                 break;
@@ -88,6 +88,7 @@ public class AdminLoggedInServerState implements FtpServerState {
                 commandHandler = new PasvCommandHandler(clientSocket, passiveDataServerSocket);
                 break;
             case "EPSV": // to enter the extended passive mode
+                serverMode = ServerMode.PASSIVE;
                 passiveDataServerSocket = new ServerSocket(0);
                 commandHandler = new EpsvCommandHandler(passiveDataServerSocket);
                 break;

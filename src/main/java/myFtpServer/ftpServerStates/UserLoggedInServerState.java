@@ -34,9 +34,9 @@ public class UserLoggedInServerState implements FtpServerState {
         switch (command) {
             case "RETR": // to retrieve file from the server
                 if(serverMode.equals(ServerMode.ACTIVE))
-                    commandHandler = new RetrCommandHandler(activeDataSocket);
+                    commandHandler = new RetrCommandHandler(activeDataSocket, user.getHomeDirectory());
                 else if(serverMode.equals(ServerMode.PASSIVE))
-                    commandHandler = new RetrCommandHandler(passiveDataServerSocket.accept());
+                    commandHandler = new RetrCommandHandler(passiveDataServerSocket.accept(), user.getHomeDirectory());
                 else
                     return new FtpResponse(425, "Can't open data connection. Choose FTP server mode");
                 break;

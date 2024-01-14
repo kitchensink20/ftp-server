@@ -55,13 +55,18 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public Session getActiveSessionForUser(int userId) {
-        String query = "SELECT s FROM Session s WHERE s.user.id = :userId AND s.isActive = true";
-        List<Session> sessions = entityManager.createQuery(query, Session.class)
-                .setParameter("userId", userId)
-                .setMaxResults(1)
-                .getResultList();
+        try {
+            String query = "SELECT s FROM Session s WHERE s.user.id = :userId AND s.isActive = true";
+            List<Session> sessions = entityManager.createQuery(query, Session.class)
+                    .setParameter("userId", userId)
+                    .setMaxResults(1)
+                    .getResultList();
 
-        return sessions.isEmpty() ? null : sessions.get(0);
+            return sessions.get(0);
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @Override
